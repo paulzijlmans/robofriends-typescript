@@ -4,22 +4,22 @@ import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
 import './App.css';
 
-export interface IRobot {
+export interface Robot {
   name: string;
   id: number;
   email: string;
 }
 
-interface IAppProps {
+interface AppProps {
 }
 
-interface IAppState {
-  robots: Array<IRobot>;
+interface AppState {
+  robots: Array<Robot>;
   searchfield: string;
 }
 
-class App extends React.Component<IAppProps, IAppState> {
-  constructor(props) {
+class App extends React.Component<AppProps, AppState> {
+  constructor(props: AppProps) {
     super(props)
     this.state = {
       robots: [],
@@ -27,19 +27,19 @@ class App extends React.Component<IAppProps, IAppState> {
     }
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     fetch('https://jsonplaceholder.typicode.com/users')
-      .then(response=> response.json())
-      .then(users => {this.setState({ robots: users})});
+      .then(response => response.json())
+      .then(users => { this.setState({ robots: users }) });
   }
 
-  onSearchChange = (event) => {
+  onSearchChange = (event: React.SyntheticEvent<HTMLInputElement>): void => {
     this.setState({ searchfield: event.currentTarget.value })
   }
 
-  render() {
-    const { robots, searchfield } = this.state;
-    const filteredRobots = robots.filter(robot =>{
+  render(): React.ReactElement {
+    const { robots, searchfield }: AppState = this.state;
+    const filteredRobots: Robot[] = robots.filter(robot => {
       return robot.name.toLowerCase().includes(searchfield.toLowerCase());
     })
     return !robots.length ?
@@ -47,7 +47,7 @@ class App extends React.Component<IAppProps, IAppState> {
       (
         <div className='tc'>
           <h1 className='f1'>RoboFriends</h1>
-          <SearchBox searchChange={this.onSearchChange}/>
+          <SearchBox searchChange={this.onSearchChange} />
           <Scroll>
             <CardList robots={filteredRobots} />
           </Scroll>
